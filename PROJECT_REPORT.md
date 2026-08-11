@@ -1,36 +1,40 @@
-# HR Performance & Productivity Analysis Dashboard
+# HR Performance Dashboard - Project Report
 
-## Project Overview
-This project is an interactive Web-Based HR Performance Dashboard built using Python (Flask) and Frontend Technologies (HTML/CSS/Chart.js). It provides real-time visualization and data-driven insights into employee performance, department-level productivity, and performance categories.
-
----
-
-## Technical Stack
-* Backend: Python, Flask
-* Frontend: HTML5, CSS3, JavaScript, Chart.js
-* Version Control: Git, GitHub
+## 1. Project Overview
+The **HR Performance Dashboard** is a web-based application designed to help Human Resources departments monitor, track, and analyze employee performance metrics in real time. The dashboard provides clear visual data insights and an easy-to-use form for adding new employee records.
 
 ---
 
-## Key Features & Functionality
-1. Key Performance Metrics (KPIs): Displays total employees, average performance score, high performers, and employees needing improvement.
-2. Interactive Visualizations: Department Performance Distribution Bar Chart and Productivity Trends Line Chart.
-3. Data Management: Dynamic data rendering for employee management.
+## 2. Objectives
+* Build a responsive user interface to display key HR metrics.
+* Provide interactive data visualisations (charts and performance indicators).
+* Enable dynamic entry of new employee performance records.
+* Deploy the application live to a cloud platform for remote access.
 
 ---
 
-## Folder Structure
-HR-Performance-Dashboard/
-├── app.py              # Flask Backend Application
-└── templates/
-    └── index.html      # Dashboard UI with Charts & CSS
+## 3. Tech Stack & Architecture
+* **Backend Framework:** Python (Flask)
+* **Frontend Technologies:** HTML5, CSS3, JavaScript (Chart.js for visualizations)
+* **Version Control:** Git & GitHub
+* **Deployment Platform:** Render
 
 ---
 
-## How to Run the Project Locally
-1. Clone the repository: git clone https://github.com/Vanya2507/HR-Performance-Dashboard.git
-2. Navigate into the project folder: cd HR-Performance-Dashboard
-3. Install dependencies: pip install flask
-4. Run the application: python app.py
-5. Open your browser and go to http://127.0.0.1:5000/
-6.
+## 4. Key Features
+* **Key Performance Indicators (KPIs):** Instant display of total employees, average performance ratings, and department breakdowns.
+* **Interactive Data Visualization:** Dynamic charts representing performance distribution across departments.
+* **Employee Management Form:** Simple interface to submit new employee entries with instant UI updates.
+* **Print / Export Functionality:** Built-in option to generate clean printable summaries of the dashboard.
+
+---
+
+## 5. Deployment Information
+* **Hosting Provider:** Render
+* **Live Web URL:** https://hr-performance-dashboard.onrender.com
+* **GitHub Repository:** https://github.com/Vanya2507/HR-Performance-Dashboard
+
+---
+
+## 6. Conclusion & Future Enhancements
+The project successfully meets all core functional requirements by delivering an accessible, real-time HR analytical tool. Future improvements include integrating a persistent SQL database (e.g., PostgreSQL) for permanent data storage and adding advanced multi-criteria filtering.
