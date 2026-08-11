@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Performance Dashboard</title>
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f4f6f9; color: #333; }
+        header { background: #2c3e50; color: white; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { margin: 0; font-size: 1.6rem; }
+        .btn-print { background-color: #e67e22; color: white; border: none; padding: 10px 18px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .btn-print:hover { background-color: #d35400; }
+        
+        .container { padding: 2rem; max-width: 1100px; margin: 0 auto; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); text-align: center; }
+        .card h3 { margin: 0; font-size: 2.2rem; color: #3498db; }
+        .card p { margin-top: 0.5rem; color: #7f8c8d; font-weight: 500; }
+        
+        /* Form Section */
+        .form-card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); margin-bottom: 2rem; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: #2c3e50; }
+        .form-group input, .form-group select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-submit { background-color: #2ecc71; color: white; border: none; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 1.3rem; }
+        .btn-submit:hover { background-color: #27ae60; }
+
+        /* Table Styles */
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.08); margin-bottom: 2.5rem; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #34495e; color: white; }
+        tr:hover { background-color: #f8f9fa; }
+        
+        /* Badges */
+        .badge { padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: white; }
+        .badge-high { background-color: #2ecc71; }
+        .badge-good { background-color: #3498db; }
+        .badge-warning { background-color: #e74c3c; }
+
+        /* Charts Layout */
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; }
+        .chart-card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+        .chart-card h3 { margin-top: 0; color: #2c3e50; text-align: center; }
+
+        @media print {
+            .form-card, .btn-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Employee Performance Dashboard</h1>
+        <button class="btn-print" onclick="window.print()">📥 Download / Print Report</button>
+    </header>
+
+    <div class="container">
+        <h2>Overview</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>{{ total_employees }}</h3>
+                <p>Total Employees</p>
+            </div>
+            <div class="card">
+                <h3>{{ departments_count }}</h3>
+                <p>Departments</p>
+            </div>
+            <div class="card">
+                <h3 style="color: #e74c3c;">{{ needs_improvement_count }}</h3>
+                <p>Needs Improvement</p>
+            </div>
+        </div>
+
+        <!-- Add Employee Form -->
+        <div class="form-card">
+            <h3 style="margin-top:0; color:#2c3e50;">➕ Add New Employee</h3>
+            <form action="/" method="POST">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Employee Name</label>
+                        <input type="text" name="name" placeholder="e.g. Rahul Sen" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select name="department" required>
+                            <option value="Engineering">Engineering</option>
+                            <option value="HR">HR</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Attendance (%)</label>
+                        <input type="number" name="attendance" min="0" max="100" placeholder="90" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Task Completion (%)</label>
+                        <input type="number" name="task_completion" min="0" max="100" placeholder="85" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Productivity Score (%)</label>
+                        <input type="number" name="productivity" min="0" max="100" placeholder="88" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Add Record</button>
+                </div>
+            </form>
+        </div>
+
+        <h2>Employee Records</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Attendance</th>
+                    <th>Task Completion</th>
+                    <th>Productivity Score</th>
+                    <th>Performance Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emp in employees %}
+                <tr>
+                    <td>{{ emp.id }}</td>
+                    <td><strong>{{ emp.name }}</strong></td>
+                    <td>{{ emp.department }}</td>
+                    <td>{{ emp.attendance }}%</td>
+                    <td>{{ emp.task_completion }}%</td>
+                    <td>{{ emp.productivity }}%</td>
+                    <td>
+                        {% if emp.status == 'High Performer' %}
+                            <span class="badge badge-high">{{ emp.status }}</span>
+                        {% elif emp.status == 'Good' %}
+                            <span class="badge badge-good">{{ emp.status }}</span>
+                        {% else %}
+                            <span class="badge badge-warning">{{ emp.status }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>HR Analytics & Visual Insights</h2>
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Department Breakdown</h3>
+                <canvas id="deptChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Average Productivity by Department</h3>
+                <canvas id="productivityChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart Scripts -->
+    <script>
+        const deptLabels = {{ dept_labels | tojson }};
+        const deptCounts = {{ dept_counts | tojson }};
+        const prodScores = {{ prod_scores | tojson }};
+
+        new Chart(document.getElementById('deptChart'), {
+            type: 'pie',
+            data: {
+                labels: deptLabels,
+                datasets: [{
+                    data: deptCounts,
+                    backgroundColor: ['#3498db', '#2ecc71', '#e67e22', '#9b59b6']
+                }]
+            }
+        });
+
+        new Chart(document.getElementById('productivityChart'), {
+            type: 'bar',
+            data: {
+                labels: deptLabels,
+                datasets: [{
+                    label: 'Avg Productivity (%)',
+                    data: prodScores,
+                    backgroundColor: '#34495e'
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+    </script>
+</body>
+</html>
